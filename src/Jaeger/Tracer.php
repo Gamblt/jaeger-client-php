@@ -168,7 +168,10 @@ class Tracer implements OTTracer
         $rpcServer = ($tags[SPAN_KIND] ?? null) == SPAN_KIND_RPC_SERVER;
 
         if ($parent == null || $parent->isDebugIdContainerOnly()) {
-            $traceId = $this->randomId();
+            $traceId = (!empty($_SERVER[''])) ? $_SERVER[TRACE_ID_HEADER] : '';
+            if (empty($traceId)) {
+                $traceId = $this->randomId();
+            }
             $spanId = $traceId;
             $parentId = null;
             $flags = 0;
